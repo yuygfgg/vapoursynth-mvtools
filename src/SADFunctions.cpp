@@ -326,7 +326,7 @@ MK_CFUNC(mvtools_pixel_satd_16x16_avx2);
 
 #undef MK_CFUNC
 
-#elif defined(MVTOOLS_ARM)
+#elif defined(__ARM_NEON__)
 
 #define MK_CFUNC(functionname) extern "C" unsigned int functionname(const uint8_t *pSrc, intptr_t nSrcPitch, const uint8_t *pRef, intptr_t nRefPitch)
 
@@ -739,7 +739,7 @@ static unsigned int Satd_SIMD(const uint8_t *pSrc, intptr_t nSrcPitch, const uin
 
     return sum;
 }
-#elif defined(MVTOOLS_ARM)
+#elif defined(__ARM_NEON__)
 template <unsigned nBlkWidth, unsigned nBlkHeight, InstructionSets opt>
 static unsigned int Satd_SIMD(const uint8_t *pSrc, intptr_t nSrcPitch, const uint8_t *pRef, intptr_t nRefPitch) {
     const unsigned partition_width = 16;
@@ -817,7 +817,7 @@ static unsigned int Satd_SIMD(const uint8_t *pSrc, intptr_t nSrcPitch, const uin
     { KEY(width, height, 8, XOP), Satd_SIMD<width, height, XOP> }, \
     { KEY(width, height, 8, AVX2), Satd_SIMD<width, height, AVX2> },
 
-#elif defined(MVTOOLS_ARM)
+#elif defined(__ARM_NEON__)
 #define SATD_X264_U8(width, height) \
     SATD_X264_U8_NEON(width, height)
 #define SATD_U8_SIMD(width, height) \

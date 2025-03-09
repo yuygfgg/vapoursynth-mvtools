@@ -438,6 +438,7 @@ static const std::unordered_map<uint32_t, DenoiseFunction> degrain_functions[6] 
     DEGRAIN_LEVEL(6),
 };
 
+#ifdef MVTOOLS_X86
 static const std::unordered_map<uint32_t, DenoiseFunction> degrain_functions_sse2[6] = {
     DEGRAIN_LEVEL_SSE2(1),
     DEGRAIN_LEVEL_SSE2(2),
@@ -446,6 +447,7 @@ static const std::unordered_map<uint32_t, DenoiseFunction> degrain_functions_sse
     DEGRAIN_LEVEL_SSE2(5),
     DEGRAIN_LEVEL_SSE2(6),
 };
+#endif
 
 static DenoiseFunction selectDegrainFunction(unsigned radius, unsigned width, unsigned height, unsigned bits, int opt) {
     DenoiseFunction degrain = degrain_functions[radius - 1].at(KEY(width, height, bits, MVOPT_SCALAR));
@@ -543,7 +545,9 @@ static void VS_CC mvdegrainCreate(const VSMap *in, VSMap *out, void *userData, V
     d.opt = !!vsapi->mapGetInt(in, "opt", 0, &err);
     if (err)
         d.opt = 1;
-
+#ifdef MVTOOLS_ARM
+    d.opt = 0; // https://github.com/dubhater/vapoursynth-mvtools/issues/86
+#endif
 
     if (plane < 0 || plane > 4) {
         vsapi->mapSetError(out, (filter + ": plane must be between 0 and 4 (inclusive).").c_str());

@@ -166,7 +166,7 @@ if host_cpu_family.startswith('x86')
 endif
 
 if host_cpu_family.startswith('arm') or host_cpu_family.startswith('aarch64')
-  cflags += ['-DMVTOOLS_ARM=1']
+  # cflags += ['-DMVTOOLS_ARM=1']
 
   if host_cpu_family.startswith('aarch64')
     asm_sources = [

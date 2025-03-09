@@ -27,3 +27,8 @@ missing
 .dirstamp
 .cache/
 .venv/
+
+build/clang_tidy/*
+.DS_Store
+checks.json
+.vscode/*
