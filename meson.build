@@ -179,6 +179,20 @@ endif
 
 
 cxx = meson.get_compiler('cpp')
+polly_code = '''
+#include <iostream>
+int main() {
+  return 0;
+}
+'''
+
+polly_result = cxx.compiles(polly_code, args: ['-mllvm', '-polly', '-mllvm', '-polly-vectorizer=stripmine', '-mllvm', '-polly-tiling'])
+
+if polly_result
+ add_project_arguments('-mllvm', '-polly', '-mllvm', '-polly-vectorizer=stripmine', '-mllvm', '-polly-tiling', language: 'cpp')
+endif
+
+add_project_arguments('-march=native', language: 'cpp')
 
 
 deps = [
